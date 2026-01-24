@@ -1,0 +1,74 @@
+esphome:
+  name: dongle01
+
+esp32:
+  board: esp32-c3-devkitm-1
+  framework:
+    type: esp-idf
+
+safe_mode:
+  boot_is_good_after: 
+    minutes: 3
+
+wifi:
+  ssid: ssid
+  password: password
+  on_connect:
+    then:
+      - switch.turn_on: led_wifi
+  on_disconnect:
+    then:
+      - switch.turn_off: led_wifi
+
+uart:
+  - id: rs485_uart
+    tx_pin: GPIO3
+    rx_pin: GPIO2
+    baud_rate: 19200
+    parity: NONE
+    data_bits: 8
+    stop_bits: 1
+
+modbus:
+  id: modbus1
+  uart_id: rs485_uart
+  flow_control_pin:
+    number: GPIO0
+    inverted: true
+
+modbus_controller:
+  - id: modbus_conroller1
+    address: 1
+    modbus_id: modbus1
+    update_interval: 10s
+
+switch:
+  - platform: gpio
+    id: led_wifi
+    internal: True
+    name: Wifi LED
+    pin:
+      number: GPIO5
+      mode: OUTPUT
+      inverted: True
+    restore_mode: ALWAYS_OFF
+
+  - platform: gpio
+    id: led_inv
+    name: INV LED
+    internal: True
+    pin:
+      number: GPIO6
+      mode: OUTPUT
+      inverted: True
+    restore_mode: ALWAYS_ON
+
+  - platform: gpio
+    id: led_cloud
+    name: Cloud LED
+    internal: True
+    pin:
+      number: GPIO7
+      mode: OUTPUT
+      inverted: True
+    restore_mode: ALWAYS_OFF

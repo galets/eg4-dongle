@@ -1,0 +1,1276 @@
+sensor:
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Grid voltage
+    id: gridRmsVolt
+    icon: mdi:lightning-bolt
+    register_type: read
+    address: 1
+    unit_of_measurement: 'V'
+    device_class: voltage
+    value_type: U_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: UPS Voltage
+    id: upsRmsVolt
+    icon: mdi:lightning-bolt
+    register_type: read
+    address: 2
+    unit_of_measurement: 'V'
+    device_class: voltage
+    value_type: U_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Generator Voltage
+    id: genRmsVolt
+    icon: mdi:lightning-bolt
+    register_type: read
+    address: 3
+    unit_of_measurement: 'V'
+    device_class: voltage
+    value_type: U_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Grid L1 voltage
+    id: gridL1RmsVolt
+    icon: mdi:lightning-bolt
+    register_type: read
+    address: 4
+    unit_of_measurement: 'V'
+    device_class: voltage
+    value_type: U_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Grid L2 voltage
+    id: gridL2RmsVolt
+    icon: mdi:lightning-bolt
+    register_type: read
+    address: 5
+    unit_of_measurement: 'V'
+    device_class: voltage
+    value_type: U_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: UPS L1 voltage
+    id: upsL1RmsVolt
+    icon: mdi:lightning-bolt
+    register_type: read
+    address: 6
+    unit_of_measurement: 'V'
+    device_class: voltage
+    value_type: U_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: UPS L2 voltage
+    id: upsL2RmsVolt
+    icon: mdi:lightning-bolt
+    register_type: read
+    address: 7
+    unit_of_measurement: 'V'
+    device_class: voltage
+    value_type: U_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Generator L1 voltage
+    id: genL1RmsVolt
+    icon: mdi:lightning-bolt
+    register_type: read
+    address: 8
+    unit_of_measurement: 'V'
+    device_class: voltage
+    value_type: U_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Generator L2 voltage
+    id: genL2RmsVolt
+    icon: mdi:lightning-bolt
+    register_type: read
+    address: 9
+    unit_of_measurement: 'V'
+    device_class: voltage
+    value_type: U_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Grid L1 current
+    id: gridL1RmsCurr
+    icon: mdi:current-ac
+    register_type: read
+    address: 10
+    unit_of_measurement: 'A'
+    device_class: current
+    value_type: U_WORD
+    filters:
+      - multiply: 0.01
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Grid L2 current
+    id: gridL2RmsCurr
+    icon: mdi:current-ac
+    register_type: read
+    address: 11
+    unit_of_measurement: 'A'
+    device_class: current
+    value_type: U_WORD
+    filters:
+      - multiply: 0.01
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Load L1 current
+    id: loadL1RmsCurr
+    icon: mdi:current-ac
+    register_type: read
+    address: 12
+    unit_of_measurement: 'A'
+    device_class: current
+    value_type: U_WORD
+    filters:
+      - multiply: 0.01
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Load L2 current
+    id: loadL2RmsCurr
+    icon: mdi:current-ac
+    register_type: read
+    address: 13
+    unit_of_measurement: 'A'
+    device_class: current
+    value_type: U_WORD
+    filters:
+      - multiply: 0.01
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Generator L1 current
+    id: genL1RmsCurr
+    icon: mdi:current-ac
+    register_type: read
+    address: 14
+    unit_of_measurement: 'A'
+    device_class: current
+    value_type: U_WORD
+    filters:
+      - multiply: 0.01
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Generator L2 current
+    id: genL2RmsCurr
+    icon: mdi:current-ac
+    register_type: read
+    address: 15
+    unit_of_measurement: 'A'
+    device_class: current
+    value_type: U_WORD
+    filters:
+      - multiply: 0.01
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: UPS L1 current
+    id: upsL1RmsCurr
+    icon: mdi:current-ac
+    register_type: read
+    address: 16
+    unit_of_measurement: 'A'
+    device_class: current
+    value_type: U_WORD
+    filters:
+      - multiply: 0.01
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: UPS L2 current
+    id: upsL2RmsCurr
+    icon: mdi:current-ac
+    register_type: read
+    address: 17
+    unit_of_measurement: 'A'
+    device_class: current
+    value_type: U_WORD
+    filters:
+      - multiply: 0.01
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Smart Load 1 L1 current
+    id: smartLoad1L1RmsCurr
+    icon: mdi:current-ac
+    register_type: read
+    address: 18
+    internal: True
+    unit_of_measurement: 'A'
+    device_class: current
+    value_type: U_WORD
+    filters:
+      - multiply: 0.01
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Smart Load 1 L2 current
+    id: smartLoad1L2RmsCurr
+    icon: mdi:current-ac
+    register_type: read
+    address: 19
+    internal: True
+    unit_of_measurement: 'A'
+    device_class: current
+    value_type: U_WORD
+    filters:
+      - multiply: 0.01
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Smart Load 2 L1 current
+    id: smartLoad2L1RmsCurr
+    icon: mdi:current-ac
+    register_type: read
+    address: 20
+    internal: True
+    unit_of_measurement: 'A'
+    device_class: current
+    value_type: U_WORD
+    filters:
+      - multiply: 0.01
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Smart Load 2 L2 current
+    id: smartLoad2L2RmsCurr
+    icon: mdi:current-ac
+    register_type: read
+    address: 21
+    internal: True
+    unit_of_measurement: 'A'
+    device_class: current
+    value_type: U_WORD
+    filters:
+      - multiply: 0.01
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Smart Load 3 L1 current
+    id: smartLoad3L1RmsCurr
+    icon: mdi:current-ac
+    register_type: read
+    address: 22
+    internal: True
+    unit_of_measurement: 'A'
+    device_class: current
+    value_type: U_WORD
+    filters:
+      - multiply: 0.01
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Smart Load 3 L2 current
+    id: smartLoad3L2RmsCurr
+    icon: mdi:current-ac
+    register_type: read
+    address: 23
+    internal: True
+    unit_of_measurement: 'A'
+    device_class: current
+    value_type: U_WORD
+    filters:
+      - multiply: 0.01
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Smart Load 4 L1 current
+    id: smartLoad4L1RmsCurr
+    icon: mdi:current-ac
+    register_type: read
+    address: 24
+    internal: True
+    unit_of_measurement: 'A'
+    device_class: current
+    value_type: U_WORD
+    filters:
+      - multiply: 0.01
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Smart Load 4 L2 current
+    id: smartLoad4L2RmsCurr
+    icon: mdi:current-ac
+    register_type: read
+    address: 25
+    internal: True
+    unit_of_measurement: 'A'
+    device_class: current
+    value_type: U_WORD
+    filters:
+      - multiply: 0.01
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Grid L1 active power
+    id: gridL1ActivePower
+    icon: mdi:power
+    register_type: read
+    address: 26
+    unit_of_measurement: 'W'
+    device_class: power
+    value_type: S_WORD
+    filters:
+      - multiply: 1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Grid L2 active power
+    id: gridL2ActivePower
+    icon: mdi:power
+    register_type: read
+    address: 27
+    unit_of_measurement: 'W'
+    device_class: power
+    value_type: S_WORD
+    filters:
+      - multiply: 1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Load L1 active power
+    id: loadL1ActivePower
+    icon: mdi:power
+    register_type: read
+    address: 28
+    unit_of_measurement: 'W'
+    device_class: power
+    value_type: S_WORD
+    filters:
+      - multiply: 1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Load L2 active power
+    id: loadL2ActivePower
+    icon: mdi:power
+    register_type: read
+    address: 29
+    unit_of_measurement: 'W'
+    device_class: power
+    value_type: S_WORD
+    filters:
+      - multiply: 1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Generator L1 active power
+    id: genL1ActivePower
+    icon: mdi:power
+    register_type: read
+    address: 30
+    unit_of_measurement: 'W'
+    device_class: power
+    value_type: S_WORD
+    filters:
+      - multiply: 1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Generator L2 active power
+    id: genL2ActivePower
+    icon: mdi:power
+    register_type: read
+    address: 31
+    unit_of_measurement: 'W'
+    device_class: power
+    value_type: S_WORD
+    filters:
+      - multiply: 1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: UPS L1 active power
+    id: upsL1ActivePower
+    icon: mdi:power
+    register_type: read
+    address: 32
+    unit_of_measurement: 'W'
+    device_class: power
+    value_type: S_WORD
+    filters:
+      - multiply: 1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: UPS L2 active power
+    id: upsL2ActivePower
+    icon: mdi:power
+    register_type: read
+    address: 33
+    unit_of_measurement: 'W'
+    device_class: power
+    value_type: S_WORD
+    filters:
+      - multiply: 1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Smart Load 1 L1 active power
+    id: smartLoad1L1ActivePower
+    icon: mdi:power
+    register_type: read
+    address: 34
+    internal: True
+    unit_of_measurement: 'W'
+    device_class: power
+    value_type: S_WORD
+    filters:
+      - multiply: 1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Smart Load 1 L2 active power
+    id: smartLoad1L2ActivePower
+    icon: mdi:power
+    register_type: read
+    address: 35
+    internal: True
+    unit_of_measurement: 'W'
+    device_class: power
+    value_type: S_WORD
+    filters:
+      - multiply: 1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Smart Load 2 L1 active power
+    id: smartLoad2L1ActivePower
+    icon: mdi:power
+    register_type: read
+    address: 36
+    internal: True
+    unit_of_measurement: 'W'
+    device_class: power
+    value_type: S_WORD
+    filters:
+      - multiply: 1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Smart Load 2 L2 active power
+    id: smartLoad2L2ActivePower
+    icon: mdi:power
+    register_type: read
+    address: 37
+    internal: True
+    unit_of_measurement: 'W'
+    device_class: power
+    value_type: S_WORD
+    filters:
+      - multiply: 1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Smart Load 3 L1 active power
+    id: smartLoad3L1ActivePower
+    icon: mdi:power
+    register_type: read
+    address: 38
+    internal: True
+    unit_of_measurement: 'W'
+    device_class: power
+    value_type: S_WORD
+    filters:
+      - multiply: 1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Smart Load 3 L2 active power
+    id: smartLoad3L2ActivePower
+    icon: mdi:power
+    register_type: read
+    address: 39
+    internal: True
+    unit_of_measurement: 'W'
+    device_class: power
+    value_type: S_WORD
+    filters:
+      - multiply: 1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Smart Load 4 L1 active power
+    id: smartLoad4L1ActivePower
+    icon: mdi:power
+    register_type: read
+    address: 40
+    internal: True
+    unit_of_measurement: 'W'
+    device_class: power
+    value_type: S_WORD
+    filters:
+      - multiply: 1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Smart Load 4 L2 active power
+    id: smartLoad4L2ActivePower
+    icon: mdi:power
+    register_type: read
+    address: 41
+    internal: True
+    unit_of_measurement: 'W'
+    device_class: power
+    value_type: S_WORD
+    filters:
+      - multiply: 1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Load energy today L1
+    id: eLoadTodayL1
+    icon: mdi:meter-electric
+    register_type: read
+    address: 42
+    unit_of_measurement: 'kWh'
+    device_class: energy
+    value_type: U_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Load energy today L2
+    id: eLoadTodayL2
+    icon: mdi:meter-electric
+    register_type: read
+    address: 43
+    unit_of_measurement: 'kWh'
+    device_class: energy
+    value_type: U_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: UPS energy today L1
+    id: eUpsTodayL1
+    icon: mdi:meter-electric
+    register_type: read
+    address: 44
+    unit_of_measurement: 'kWh'
+    device_class: energy
+    value_type: U_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: UPS energy today L2
+    id: eUpsTodayL2
+    icon: mdi:meter-electric
+    register_type: read
+    address: 45
+    unit_of_measurement: 'kWh'
+    device_class: energy
+    value_type: U_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Energy to grid today
+    id: eToGridToday
+    icon: mdi:meter-electric
+    register_type: read
+    address: 46
+    unit_of_measurement: 'kWh'
+    device_class: energy
+    value_type: U_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Energy to user today L1
+    id: eToUserToday
+    icon: mdi:meter-electric
+    register_type: read
+    address: 48
+    unit_of_measurement: 'kWh'
+    device_class: energy
+    value_type: U_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Energy Generator
+    id: eGenToday
+    icon: mdi:meter-electric
+    register_type: read
+    address: 49
+    unit_of_measurement: 'kWh'
+    device_class: energy
+    value_type: U_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Smart Load 1 energy today L1
+    id: eSmartLoad1TodayL1
+    icon: mdi:meter-electric
+    register_type: read
+    address: 50
+    internal: True
+    unit_of_measurement: 'kWh'
+    device_class: energy
+    value_type: U_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Smart Load 1 energy today L2
+    id: eSmartLoad1TodayL2
+    icon: mdi:meter-electric
+    register_type: read
+    address: 51
+    internal: True
+    unit_of_measurement: 'kWh'
+    device_class: energy
+    value_type: U_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Smart Load 2 energy today L1
+    id: eSmartLoad2TodayL1
+    icon: mdi:meter-electric
+    register_type: read
+    address: 52
+    internal: True
+    unit_of_measurement: 'kWh'
+    device_class: energy
+    value_type: U_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Smart Load 2 energy today L2
+    id: eSmartLoad2TodayL2
+    icon: mdi:meter-electric
+    register_type: read
+    address: 53
+    internal: True
+    unit_of_measurement: 'kWh'
+    device_class: energy
+    value_type: U_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Smart Load 3 energy today L1
+    id: eSmartLoad3TodayL1
+    icon: mdi:meter-electric
+    register_type: read
+    address: 54
+    internal: True
+    unit_of_measurement: 'kWh'
+    device_class: energy
+    value_type: U_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Smart Load 3 energy today L2
+    id: eSmartLoad3TodayL2
+    icon: mdi:meter-electric
+    register_type: read
+    address: 55
+    internal: True
+    unit_of_measurement: 'kWh'
+    device_class: energy
+    value_type: U_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Smart Load 4 energy today L1
+    id: eSmartLoad4TodayL1
+    icon: mdi:meter-electric
+    register_type: read
+    address: 56
+    internal: True
+    unit_of_measurement: 'kWh'
+    device_class: energy
+    value_type: U_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Smart Load 4 energy today L2
+    id: eSmartLoad4TodayL2
+    icon: mdi:meter-electric
+    register_type: read
+    address: 57
+    internal: True
+    unit_of_measurement: 'kWh'
+    device_class: energy
+    value_type: U_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: AC couple 1 energy today L1
+    id: eACcouple1TodayL1
+    icon: mdi:meter-electric
+    register_type: read
+    address: 58
+    internal: True
+    unit_of_measurement: 'kWh'
+    device_class: energy
+    value_type: U_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: AC couple 1 energy today L2
+    id: eACcouple1TodayL2
+    icon: mdi:meter-electric
+    register_type: read
+    address: 59
+    internal: True
+    unit_of_measurement: 'kWh'
+    device_class: energy
+    value_type: U_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: AC couple 2 energy today L1
+    id: eACcouple2TodayL1
+    icon: mdi:meter-electric
+    register_type: read
+    address: 60
+    internal: True
+    unit_of_measurement: 'kWh'
+    device_class: energy
+    value_type: U_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: AC couple 2 energy today L2
+    id: eACcouple2TodayL2
+    icon: mdi:meter-electric
+    register_type: read
+    address: 61
+    internal: True
+    unit_of_measurement: 'kWh'
+    device_class: energy
+    value_type: U_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: AC couple 3 energy today L1
+    id: eACcouple3TodayL1
+    icon: mdi:meter-electric
+    register_type: read
+    address: 62
+    internal: True
+    unit_of_measurement: 'kWh'
+    device_class: energy
+    value_type: U_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: AC couple 3 energy today L2
+    id: eACcouple3TodayL2
+    icon: mdi:meter-electric
+    register_type: read
+    address: 63
+    internal: True
+    unit_of_measurement: 'kWh'
+    device_class: energy
+    value_type: U_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: AC couple 4 energy today L1
+    id: eACcouple4TodayL1
+    icon: mdi:meter-electric
+    register_type: read
+    address: 64
+    internal: True
+    unit_of_measurement: 'kWh'
+    device_class: energy
+    value_type: U_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: AC couple 4 energy today L2
+    id: eACcouple4TodayL2
+    icon: mdi:meter-electric
+    register_type: read
+    address: 65
+    internal: True
+    unit_of_measurement: 'kWh'
+    device_class: energy
+    value_type: U_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Total load energy L1
+    id: eLoadTotalL1
+    icon: mdi:meter-electric
+    register_type: read
+    address: 68
+    unit_of_measurement: 'kWh'
+    state_class: total_increasing
+    device_class: energy
+    value_type: S_DWORD_R
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Total load energy L2
+    id: eLoadTotalL2
+    icon: mdi:meter-electric
+    register_type: read
+    address: 70
+    unit_of_measurement: 'kWh'
+    state_class: total_increasing
+    device_class: energy
+    value_type: S_DWORD_R
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Total UPS energy L1
+    id: eUpsTotalL1
+    icon: mdi:meter-electric
+    register_type: read
+    address: 72
+    unit_of_measurement: 'kWh'
+    state_class: total_increasing
+    device_class: energy
+    value_type: S_DWORD_R
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Total UPS energy L2
+    id: eUpsTotalL2
+    icon: mdi:meter-electric
+    register_type: read
+    address: 74
+    unit_of_measurement: 'kWh'
+    state_class: total_increasing
+    device_class: energy
+    value_type: S_DWORD_R
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Total energy to grid L1
+    id: eToGridTotalL1
+    icon: mdi:meter-electric
+    register_type: read
+    address: 76
+    unit_of_measurement: 'kWh'
+    state_class: total_increasing
+    device_class: energy
+    value_type: S_DWORD_R
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Total energy to grid L2
+    id: eToGridTotalL2
+    icon: mdi:meter-electric
+    register_type: read
+    address: 78
+    unit_of_measurement: 'kWh'
+    state_class: total_increasing
+    device_class: energy
+    value_type: S_DWORD_R
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Total energy to user L1
+    id: eToUserTotalL1
+    icon: mdi:meter-electric
+    register_type: read
+    address: 80
+    unit_of_measurement: 'kWh'
+    state_class: total_increasing
+    device_class: energy
+    value_type: S_DWORD_R
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Total energy to user L2
+    id: eToUserTotalL2
+    icon: mdi:meter-electric
+    register_type: read
+    address: 82
+    unit_of_measurement: 'kWh'
+    state_class: total_increasing
+    device_class: energy
+    value_type: S_DWORD_R
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Total energy Generator L1
+    id: eGenTotalL1
+    icon: mdi:meter-electric
+    register_type: read
+    address: 84
+    unit_of_measurement: 'kWh'
+    state_class: total_increasing
+    device_class: energy
+    value_type: S_DWORD_R
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Total energy Generator L2
+    id: eGenTotalL2
+    icon: mdi:meter-electric
+    register_type: read
+    address: 86
+    unit_of_measurement: 'kWh'
+    state_class: total_increasing
+    device_class: energy
+    value_type: S_DWORD_R
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Total Smart Load 1 energy L1
+    id: eSmartLoad1TotalL1
+    icon: mdi:meter-electric
+    register_type: read
+    address: 88
+    unit_of_measurement: 'kWh'
+    state_class: total_increasing
+    device_class: energy
+    value_type: S_DWORD_R
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Total Smart Load 1 energy L2
+    id: eSmartLoad1TotalL2
+    icon: mdi:meter-electric
+    register_type: read
+    address: 90
+    internal: True
+    unit_of_measurement: 'kWh'
+    state_class: total_increasing
+    device_class: energy
+    value_type: S_DWORD_R
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Total Smart Load 2 energy L1
+    id: eSmartLoad2TotalL1
+    icon: mdi:meter-electric
+    register_type: read
+    address: 92
+    internal: True
+    unit_of_measurement: 'kWh'
+    state_class: total_increasing
+    device_class: energy
+    value_type: S_DWORD_R
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Total Smart Load 2 energy L2
+    id: eSmartLoad2TotalL2
+    icon: mdi:meter-electric
+    register_type: read
+    address: 94
+    internal: True
+    unit_of_measurement: 'kWh'
+    state_class: total_increasing
+    device_class: energy
+    value_type: S_DWORD_R
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Total Smart Load 3 energy L1
+    id: eSmartLoad3TotalL1
+    icon: mdi:meter-electric
+    register_type: read
+    address: 96
+    internal: True
+    unit_of_measurement: 'kWh'
+    state_class: total_increasing
+    device_class: energy
+    value_type: S_DWORD_R
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Total Smart Load 3 energy L2
+    id: eSmartLoad3TotalL2
+    icon: mdi:meter-electric
+    register_type: read
+    address: 98
+    internal: True
+    unit_of_measurement: 'kWh'
+    state_class: total_increasing
+    device_class: energy
+    value_type: S_DWORD_R
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Total Smart Load 4 energy L1
+    id: eSmartLoad4TotalL1
+    icon: mdi:meter-electric
+    register_type: read
+    address: 100
+    internal: True
+    unit_of_measurement: 'kWh'
+    state_class: total_increasing
+    device_class: energy
+    value_type: S_DWORD_R
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Total Smart Load 4 energy L2
+    id: eSmartLoad4TotalL2
+    icon: mdi:meter-electric
+    register_type: read
+    address: 102
+    internal: True
+    unit_of_measurement: 'kWh'
+    state_class: total_increasing
+    device_class: energy
+    value_type: S_DWORD_R
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Total AC couple 1 energy L1
+    id: eACcouple1TotalL1
+    icon: mdi:meter-electric
+    register_type: read
+    address: 104
+    internal: True
+    unit_of_measurement: 'kWh'
+    state_class: total_increasing
+    device_class: energy
+    value_type: S_DWORD_R
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Total AC couple 1 energy L2
+    id: eACcouple1TotalL2
+    icon: mdi:meter-electric
+    register_type: read
+    address: 106
+    internal: True
+    unit_of_measurement: 'kWh'
+    state_class: total_increasing
+    device_class: energy
+    value_type: S_DWORD_R
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Total AC couple 2 energy L1
+    id: eACcouple2TotalL1
+    icon: mdi:meter-electric
+    register_type: read
+    address: 108
+    internal: True
+    unit_of_measurement: 'kWh'
+    state_class: total_increasing
+    device_class: energy
+    value_type: S_DWORD_R
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Total AC couple 2 energy L2
+    id: eACcouple2TotalL2
+    icon: mdi:meter-electric
+    register_type: read
+    address: 110
+    internal: True
+    unit_of_measurement: 'kWh'
+    state_class: total_increasing
+    device_class: energy
+    value_type: S_DWORD_R
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Total AC couple 3 energy L1
+    id: eACcouple3TotalL1
+    icon: mdi:meter-electric
+    register_type: read
+    address: 112
+    internal: True
+    unit_of_measurement: 'kWh'
+    state_class: total_increasing
+    device_class: energy
+    value_type: S_DWORD_R
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Total AC couple 3 energy L2
+    id: eACcouple3TotalL2
+    icon: mdi:meter-electric
+    register_type: read
+    address: 114
+    internal: True
+    unit_of_measurement: 'kWh'
+    state_class: total_increasing
+    device_class: energy
+    value_type: S_DWORD_R
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Total AC couple 4 energy L1
+    id: eACcouple4TotalL1
+    icon: mdi:meter-electric
+    register_type: read
+    address: 116
+    internal: True
+    unit_of_measurement: 'kWh'
+    state_class: total_increasing
+    device_class: energy
+    value_type: S_DWORD_R
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Total AC couple 4 energy L2
+    id: eACcouple4TotalL2
+    icon: mdi:meter-electric
+    register_type: read
+    address: 118
+    internal: True
+    unit_of_measurement: 'kWh'
+    state_class: total_increasing
+    device_class: energy
+    value_type: S_DWORD_R
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Phase lock frequency
+    id: phaseLockFreq
+    register_type: read
+    address: 128
+    unit_of_measurement: 'Hz'
+    value_type: U_WORD
+    filters:
+      - multiply: 0.01
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Grid frequency
+    id: gridFreq
+    register_type: read
+    address: 129
+    unit_of_measurement: 'Hz'
+    value_type: U_WORD
+    filters:
+      - multiply: 0.01
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Generator frequency
+    id: genFreq
+    register_type: read
+    address: 130
+    unit_of_measurement: 'Hz'
+    value_type: U_WORD
+    filters:
+      - multiply: 0.01
