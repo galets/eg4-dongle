@@ -8,6 +8,15 @@ Original source of information is in [this thread](https://diysolarforum.com/thr
 
 This project focuses on reflashing the stock EG4 WiFi and Ethernet dongles with custom firmware to enable local, high-frequency monitoring and control of solar inverters. By replacing the proprietary factory firmware, users can bypass cloud dependencies and integrate their hardware directly into their local smart home ecosystems.
 
+# Disclaimer
+
+Use this software and hardware configuration at your own risk. This project is provided "as is"
+without any warranty of any kind, express or implied. By using this tool, you acknowledge
+that you are solely responsible for any outcomes. Improper implementation or use can cause
+permanent damage to your equipment, including your inverters and monitoring hardware; any such
+damage is entirely at your own risk. The author assumes no liability for hardware failure,
+data loss, or any other complications arising from the use of this repository.
+
 ## What is being done
 
 The community has successfully identified the hardware architecture of the EG4 dongles and developed a method to flash them with **ESPHome**.
