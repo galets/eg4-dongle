@@ -131,6 +131,14 @@ Known serial numbers known to work are: BJxxxxxxxx, DJxxxxxxxx. Chip: ESP32-C3
 | GPIO6    | INV LED                      |
 | GPIO7    | Cloud LED                    |
 
+## Flashing
+
+Following software can be used to assist with flashing, identification, and backup/restore
+
+* [ESPConnect](https://thelastoutpostworkshop.github.io/ESPConnect/) - ESP32 GUI tool
+* [ESPHome](https://esphome.io/) - YAML based programming tool used in Home Assistant intergations
+* [ESPTool](https://github.com/espressif/esptool) for command line operations
+
 ## Sample Configs
 
 TODO: Add more
