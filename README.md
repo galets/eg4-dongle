@@ -19,11 +19,11 @@ ecosystems.
 
 Use this software and hardware configuration at your own risk. This project is
 provided "as is" without any warranty of any kind, express or implied. By using
-this tool, you acknowledge that you are solely responsible for any outcomes.
-Improper implementation or use can cause permanent damage to your equipment,
-including your inverters and monitoring hardware; any such damage is entirely at
-your own risk. The author assumes no liability for hardware failure, data loss,
-or any other complications arising from the use of this repository.
+this tool, you acknowledge that you are solely responsible for any outcomes. You
+can cause permanent damage to your equipment, including your inverters and
+monitoring hardware; any such damage is entirely at your own risk. The author
+assumes no liability for hardware failure, data loss, or any other complications
+arising from the use of this repository.
 
 ## What is being done
 
@@ -118,6 +118,9 @@ See [example config](./dongle-variants/wifi-ethernet-dongle.yaml)
 
 [EG4 Wi-Fi only Dongle](https://eg4electronics.com/wp-content/uploads/2024/07/EG4-Wifi-Dongle-Troubleshooting-Guide.pdf).
 See [example config](./dongle-variants/wifi-dongle.yaml)
+
+Known serial numbers known to work are: BJxxxxxxxx, DJxxxxxxxx. Chip: ESP32-C3
+(QFN32), features: WiFi, BLE, Embedded Flash 4MB (XMC)
 
 | **GPIO** | **Function**                 |
 | -------- | ---------------------------- |
