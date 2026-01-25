@@ -1,3 +1,50 @@
+text_sensor:
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Serial Number
+    id: serialNumber
+    icon: mdi:card-text-outline
+    register_type: holding
+    address: 2
+    response_size: 10
+    register_count: 5
+    skip_updates: 50
+    lambda: |-
+      char result[20];
+      sprintf(result, "%c%c%c%c%c%c%c%c%c%c", 
+          data[item->offset + 1],
+          data[item->offset + 0],
+          data[item->offset + 3],
+          data[item->offset + 2],
+          data[item->offset + 5],
+          data[item->offset + 4],
+          data[item->offset + 7],
+          data[item->offset + 6],
+          data[item->offset + 9],
+          data[item->offset + 8]);
+      return {result};
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Firmware Version
+    id: firmwareVersion
+    icon: mdi:card-text-outline
+    register_type: holding
+    address: 7
+    response_size: 6
+    register_count: 3
+    skip_updates: 50
+    lambda: |-
+      char result[20];
+      sprintf(result, "%c%c%c%c-%02X%02X", 
+          data[item->offset + 1],
+          data[item->offset + 0],
+          data[item->offset + 3],
+          data[item->offset + 2],
+          data[item->offset + 4],
+          data[item->offset + 5]);
+      return {result};
+
 sensor:
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
