@@ -26,7 +26,7 @@ modbus_controller:
   - id: inverter_1
     address: 1
     modbus_id: mb
-    update_interval: 10s
+    update_interval: 60s
 
 ethernet:
   type: IP101

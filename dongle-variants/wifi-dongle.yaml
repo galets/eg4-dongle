@@ -40,7 +40,7 @@ modbus_controller:
   - id: modbus_conroller1
     address: 1
     modbus_id: modbus1
-    update_interval: 10s
+    update_interval: 60s
 
 switch:
   - platform: gpio
