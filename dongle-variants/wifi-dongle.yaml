@@ -23,7 +23,9 @@ wifi:
 uart:
   - id: rs485_uart
     tx_pin: GPIO3
-    rx_pin: GPIO2
+    rx_pin: 
+      number: GPIO2
+      ignore_strapping_warning: true
     baud_rate: 19200
     parity: NONE
     data_bits: 8
