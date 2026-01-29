@@ -1,0 +1,1267 @@
+text_sensor:
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Serial No
+    id: serialNumber
+    icon: mdi:card-text-outline
+    entity_category: diagnostic
+    register_type: holding
+    address: 2
+    response_size: 10
+    register_count: 10
+    skip_updates: 50
+    lambda: |-
+      char result[20];
+      sprintf(result, "%c%c%c%c%c%c%c%c%c%c", 
+          data[item->offset + 1],
+          data[item->offset + 0],
+          data[item->offset + 3],
+          data[item->offset + 2],
+          data[item->offset + 5],
+          data[item->offset + 4],
+          data[item->offset + 7],
+          data[item->offset + 6],
+          data[item->offset + 9],
+          data[item->offset + 8]);
+      return {result};
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Firmware Version
+    id: firmwareVersion
+    icon: mdi:card-text-outline
+    entity_category: diagnostic
+    register_type: holding
+    address: 7
+    response_size: 8
+    register_count: 4
+    skip_updates: 50
+    lambda: |-
+      char result[40];
+      sprintf(result, "%c%c%c%c-%i.%i.%i.%i", 
+          data[item->offset + 1],
+          data[item->offset + 0],
+          data[item->offset + 3],
+          data[item->offset + 2],
+          data[item->offset + 5],
+          data[item->offset + 4],
+          data[item->offset + 7],
+          data[item->offset + 6]);
+      return {result};
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Operation Mode
+    id: operationMode
+    icon: mdi:solar-power-variant-outline
+    entity_category: diagnostic
+    register_type: read
+    address: 0
+    lambda: |-
+      uint8_t value = data[item->offset+1];
+      switch (value) {
+        case 0x00: return { "Standby" };
+        case 0x01: return { "Fault" };
+        case 0x02: return { "Programming" };
+        case 0x04: return { "PV" };
+        case 0x08: return { "PV charging" };
+        case 0x0C: return { "PV charging + grid" };
+        case 0x10: return { "Battery + grid" };
+        case 0x14: return { "(PV + battery) + grid" };
+        case 0x20: return { "AC charging" };
+        case 0x28: return { "(PV + AC) charging" };
+        case 0x40: return { "Battery off-grid" };
+        case 0x60: return { "Off-grid + battery charging" };
+        case 0x80: return { "PV off-grid" };
+        case 0xC0: return { "(PV + battery) off-grid" };
+        case 0x88: return { "PV charging + off-grid" };
+        default: {
+          char result[40];
+          sprintf(result, "Unknown code: 0x%02X", value);
+          return {result};
+        }
+      }
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Fault Code
+    id: faultCode
+    entity_category: diagnostic
+    icon: mdi:alert
+    register_type: read
+    address: 60
+    register_count: 2
+    lambda: |-
+      char result[20];
+      sprintf(result, "%02X%02X%02X%02X", 
+          data[item->offset + 0],
+          data[item->offset + 1],
+          data[item->offset + 2],
+          data[item->offset + 3]);
+      return {result};
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Warning Code
+    id: warnCode
+    icon: mdi:alert
+    entity_category: diagnostic
+    register_type: read
+    address: 62
+    register_count: 2
+    lambda: |-
+      char result[20];
+      sprintf(result, "%02X%02X%02X%02X", 
+          data[item->offset + 0],
+          data[item->offset + 1],
+          data[item->offset + 2],
+          data[item->offset + 3]);
+      return {result};
+
+sensor:
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: PV1 voltage, not available in AC energy storage systems.
+    id: Vpv1
+    icon: mdi:lightning-bolt
+    register_type: read
+    address: 1
+    unit_of_measurement: 'V'
+    device_class: voltage
+    value_type: U_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: PV2 voltage, not available in AC energy storage systems.
+    id: Vpv2
+    icon: mdi:lightning-bolt
+    register_type: read
+    address: 2
+    unit_of_measurement: 'V'
+    device_class: voltage
+    value_type: U_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: PV3 voltage, not available in AC energy storage systems.
+    id: Vpv3
+    icon: mdi:lightning-bolt
+    register_type: read
+    address: 3
+    unit_of_measurement: 'V'
+    device_class: voltage
+    value_type: U_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Battery voltage
+    id: Vbat
+    icon: mdi:lightning-bolt
+    register_type: read
+    address: 4
+    unit_of_measurement: 'V'
+    device_class: voltage
+    value_type: U_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Battery state of health
+    id: SOH
+    icon: mdi:battery-50
+    register_type: read
+    address: 5
+    unit_of_measurement: '%'
+    device_class: battery
+    value_type: U_WORD
+    lambda: return data[item->offset];
+          
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Battery state of charge
+    id: SOC
+    icon: mdi:battery-50
+    register_type: read
+    address: 5
+    unit_of_measurement: '%'
+    device_class: battery
+    value_type: U_WORD
+    lambda: return data[item->offset + 1];
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: PV1 power
+    id: Ppv1
+    icon: mdi:power
+    register_type: read
+    address: 7
+    unit_of_measurement: 'W'
+    device_class: power
+    value_type: S_WORD
+    filters:
+      - multiply: 1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: PV2 power
+    id: Ppv2
+    icon: mdi:power
+    register_type: read
+    address: 8
+    unit_of_measurement: 'W'
+    device_class: power
+    value_type: S_WORD
+    filters:
+      - multiply: 1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: PV3 power
+    id: Ppv3
+    icon: mdi:power
+    register_type: read
+    address: 9
+    unit_of_measurement: 'W'
+    device_class: power
+    value_type: S_WORD
+    filters:
+      - multiply: 1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: PV power
+    id: Ppv
+    icon: mdi:power
+    register_type: read
+    address: 7
+    register_count: 3
+    unit_of_measurement: 'W'
+    device_class: power
+    value_type: S_WORD
+    lambda: |-
+      const uint16_t* d = reinterpret_cast<const uint16_t*>(&data[item->offset]);
+      return __builtin_bswap16(d[0]) + __builtin_bswap16(d[1]) + __builtin_bswap16(d[2]);
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Charging power (power flowing into the battery)
+    id: Pcharge
+    icon: mdi:power
+    register_type: read
+    address: 10
+    unit_of_measurement: 'W'
+    device_class: power
+    value_type: S_WORD
+    filters:
+      - multiply: 1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Discharging power (power flowing out of battery)
+    id: Pdischarge
+    icon: mdi:power
+    register_type: read
+    address: 11
+    unit_of_measurement: 'W'
+    device_class: power
+    value_type: S_WORD
+    filters:
+      - multiply: 1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Utility grid frequency
+    id: Fac
+    register_type: read
+    address: 15
+    unit_of_measurement: 'Hz'
+    value_type: U_WORD
+    filters:
+      - multiply: 0.01
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: 'On-grid inverter power (For three phase: R phase)'
+    id: Pinv
+    icon: mdi:power
+    register_type: read
+    address: 16
+    unit_of_measurement: 'W'
+    device_class: power
+    value_type: S_WORD
+    filters:
+      - multiply: 1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: 'AC charging rectification power (For three phase: R phase)'
+    id: Prec
+    icon: mdi:power
+    register_type: read
+    address: 17
+    unit_of_measurement: 'W'
+    device_class: power
+    value_type: S_WORD
+    filters:
+      - multiply: 1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: 'Inverter rms current output (For three phase: R phase)'
+    id: IinvRMS
+    icon: mdi:current-ac
+    register_type: read
+    address: 18
+    unit_of_measurement: 'A'
+    device_class: current
+    value_type: U_WORD
+    filters:
+      - multiply: 0.01
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: 'Power factor: x≤1000 -> x div 1000, x>1000 -> (1000-x) div 1000'
+    id: PF
+    icon: mdi:power
+    register_type: read
+    address: 19
+    value_type: U_WORD
+    filters:
+      - multiply: 0.001
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: 'Off-grid inverter power (For three phase: R phase)'
+    id: Peps
+    icon: mdi:power
+    register_type: read
+    address: 24
+    unit_of_measurement: 'W'
+    device_class: power
+    value_type: S_WORD
+    filters:
+      - multiply: 1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: 'Off-grid apparent power (For three phase: R phase)'
+    id: Seps
+    register_type: read
+    address: 25
+    unit_of_measurement: 'VA'
+    value_type: U_WORD
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: 'User on-grid power (For three phase: R phase)'
+    id: Ptogrid
+    icon: mdi:power
+    register_type: read
+    address: 26
+    unit_of_measurement: 'W'
+    device_class: power
+    value_type: S_WORD
+    filters:
+      - multiply: 1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: 'Grid power capacity (For three phase: R phase)'
+    id: Ptouser
+    icon: mdi:power
+    register_type: read
+    address: 27
+    unit_of_measurement: 'W'
+    device_class: power
+    value_type: S_WORD
+    filters:
+      - multiply: 1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: PV1 power generation today
+    id: Epv1_day
+    icon: mdi:meter-electric
+    register_type: read
+    address: 28
+    unit_of_measurement: 'kWh'
+    device_class: energy
+    value_type: U_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: PV2 power generation today
+    id: Epv2_day
+    icon: mdi:meter-electric
+    register_type: read
+    address: 29
+    unit_of_measurement: 'kWh'
+    device_class: energy
+    value_type: U_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: PV3 power generation today
+    id: Epv3_day
+    icon: mdi:meter-electric
+    register_type: read
+    address: 30
+    unit_of_measurement: 'kWh'
+    device_class: energy
+    value_type: U_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: PV power generation today, total
+    id: Epv_day
+    icon: mdi:meter-electric
+    register_type: read
+    address: 28
+    register_count: 3
+    unit_of_measurement: 'kWh'
+    device_class: energy
+    value_type: U_WORD
+    lambda: |-
+      const uint16_t* d = reinterpret_cast<const uint16_t*>(&data[item->offset]);
+      return __builtin_bswap16(d[0]) + __builtin_bswap16(d[1]) + __builtin_bswap16(d[2]);
+    filters:
+      - multiply: 0.1
+
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Today's on-grid inverter output energy
+    id: Einv_day
+    icon: mdi:meter-electric
+    register_type: read
+    address: 31
+    unit_of_measurement: 'kWh'
+    device_class: energy
+    value_type: U_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Today's AC charging rectifier energy
+    id: Erec_day
+    icon: mdi:meter-electric
+    register_type: read
+    address: 32
+    unit_of_measurement: 'kWh'
+    device_class: energy
+    value_type: U_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Energy Charge today
+    id: Echg_day
+    icon: mdi:meter-electric
+    register_type: read
+    address: 33
+    unit_of_measurement: 'kWh'
+    device_class: energy
+    value_type: U_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Energy Discharge today
+    id: Edischg_day
+    icon: mdi:meter-electric
+    register_type: read
+    address: 34
+    unit_of_measurement: 'kWh'
+    device_class: energy
+    value_type: U_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Today's off-grid output energy
+    id: Eeps_day
+    icon: mdi:meter-electric
+    register_type: read
+    address: 35
+    unit_of_measurement: 'kWh'
+    device_class: energy
+    value_type: U_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Today's export to grid energy
+    id: Etogrid_day
+    icon: mdi:meter-electric
+    register_type: read
+    address: 36
+    unit_of_measurement: 'kWh'
+    device_class: energy
+    value_type: U_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Electricity supplied to user from the grid today
+    id: Etouser_day
+    icon: mdi:meter-electric
+    register_type: read
+    address: 37
+    unit_of_measurement: 'kWh'
+    device_class: energy
+    value_type: U_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Voltage of Bus 1
+    id: Vbus1
+    icon: mdi:lightning-bolt
+    register_type: read
+    address: 38
+    unit_of_measurement: 'V'
+    device_class: voltage
+    value_type: U_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Voltage of Bus 2
+    id: Vbus2
+    icon: mdi:lightning-bolt
+    register_type: read
+    address: 39
+    unit_of_measurement: 'V'
+    device_class: voltage
+    value_type: U_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: PV1 cumulative power
+    id: Epv1_all
+    icon: mdi:meter-electric
+    register_type: read
+    address: 40
+    unit_of_measurement: 'kWh'
+    state_class: total_increasing
+    device_class: energy
+    value_type: S_DWORD_R
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: PV2 cumulative power
+    id: Epv2_all
+    icon: mdi:meter-electric
+    register_type: read
+    address: 42
+    unit_of_measurement: 'kWh'
+    state_class: total_increasing
+    device_class: energy
+    value_type: S_DWORD_R
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: PV3 cumulative power
+    id: Epv3_all
+    icon: mdi:meter-electric
+    register_type: read
+    address: 44
+    unit_of_measurement: 'kWh'
+    state_class: total_increasing
+    device_class: energy
+    value_type: S_DWORD_R
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: PV cumulative power
+    id: Epv_all
+    icon: mdi:meter-electric
+    register_type: read
+    address: 40
+    register_count: 6
+    unit_of_measurement: 'kWh'
+    state_class: total_increasing
+    device_class: energy
+    lambda: |-
+      const uint16_t* p = reinterpret_cast<const uint16_t*>(&data[item->offset]);
+      return __builtin_bswap16(p[0]) + __builtin_bswap16(p[1]) * 0x0010000U + 
+             __builtin_bswap16(p[2]) + __builtin_bswap16(p[3]) * 0x0010000U +
+             __builtin_bswap16(p[4]) + __builtin_bswap16(p[5]) * 0x0010000U;
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Inverter output accumulated power
+    id: Einv_all
+    icon: mdi:meter-electric
+    register_type: read
+    address: 46
+    unit_of_measurement: 'kWh'
+    state_class: total_increasing
+    device_class: energy
+    value_type: S_DWORD_R
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: AC charging accumulated rectified power
+    id: Erec_all
+    icon: mdi:meter-electric
+    register_type: read
+    address: 48
+    unit_of_measurement: 'kWh'
+    state_class: total_increasing
+    device_class: energy
+    value_type: S_DWORD_R
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Cumulative charge energy
+    id: Echg_all
+    icon: mdi:meter-electric
+    register_type: read
+    address: 50
+    unit_of_measurement: 'kWh'
+    state_class: total_increasing
+    device_class: energy
+    value_type: S_DWORD_R
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Cumulative discharge energy
+    id: Edischg_all
+    icon: mdi:meter-electric
+    register_type: read
+    address: 52
+    unit_of_measurement: 'kWh'
+    state_class: total_increasing
+    device_class: energy
+    value_type: S_DWORD_R
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Cumulative inverter off-grid output energy
+    id: Eeps_all
+    icon: mdi:meter-electric
+    register_type: read
+    address: 54
+    unit_of_measurement: 'kWh'
+    state_class: total_increasing
+    device_class: energy
+    value_type: S_DWORD_R
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Accumulate export energy
+    id: Etogrid_all
+    icon: mdi:meter-electric
+    register_type: read
+    address: 56
+    unit_of_measurement: 'kWh'
+    state_class: total_increasing
+    device_class: energy
+    value_type: S_DWORD_R
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Cumulative import energy
+    id: Etouser_all
+    icon: mdi:meter-electric
+    register_type: read
+    address: 58
+    unit_of_measurement: 'kWh'
+    state_class: total_increasing
+    device_class: energy
+    value_type: S_DWORD_R
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Internal temperature
+    id: Tinner
+    icon: mdi:thermometer
+    register_type: read
+    address: 64
+    unit_of_measurement: '°C'
+    device_class: temperature
+    value_type: U_WORD
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Radiator temperature 1
+    id: Tradiator1
+    icon: mdi:thermometer
+    register_type: read
+    address: 65
+    unit_of_measurement: '°C'
+    device_class: temperature
+    value_type: U_WORD
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Radiator temperature 2
+    id: Tradiator2
+    icon: mdi:thermometer
+    register_type: read
+    address: 66
+    unit_of_measurement: '°C'
+    device_class: temperature
+    value_type: U_WORD
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Battery temperature
+    id: Tbat
+    icon: mdi:thermometer
+    register_type: read
+    address: 67
+    unit_of_measurement: '°C'
+    device_class: temperature
+    value_type: U_WORD
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Runtime duration low byte
+    id: RunningTime
+    icon: mdi:timer
+    register_type: read
+    address: 69
+    unit_of_measurement: 's'
+    device_class: duration
+    value_type: S_DWORD_R
+
+  # - platform: modbus_controller
+  #   modbus_controller_id: modbus_conroller1
+  #   name: 'Auto test status (Bit0-3): 0=not started, 1=started'
+  #   id: AutoTestStart
+  #   register_type: read
+  #   address: 71
+  #   value_type: U_WORD
+
+  # - platform: modbus_controller
+  #   modbus_controller_id: modbus_conroller1
+  #   name: 'Test status (Bit4-7): 0=waiting, 1=testing, 2=test fail, 3=V test OK, 4=F test OK, 5=test pass'
+  #   id: UbAutoTestStatus
+  #   register_type: read
+  #   address: 71
+  #   value_type: U_WORD
+
+  # - platform: modbus_controller
+  #   modbus_controller_id: modbus_conroller1
+  #   name: 'Test step (Bit8-11): 1=V1L, 2=V1H, 3=F1L, 4=F1H, 5=V2L, 6=V2H, 7=F2L, 8=F2H'
+  #   id: UbAutoTestStep
+  #   register_type: read
+  #   address: 71
+  #   value_type: U_WORD
+
+  # - platform: modbus_controller
+  #   modbus_controller_id: modbus_conroller1
+  #   name: Voltage/frequency limit depending on test step
+  #   id: wAutoTestLimit
+  #   register_type: read
+  #   address: 72
+  #   unit_of_measurement: 'V/Hz'
+  #   value_type: U_WORD
+  #   filters:
+  #     - multiply: 0.1/0.01
+
+  # - platform: modbus_controller
+  #   modbus_controller_id: modbus_conroller1
+  #   name: Auto test default time
+  #   id: uwAutoTestDefaultTime
+  #   register_type: read
+  #   address: 73
+  #   unit_of_measurement: 'ms'
+  #   value_type: U_WORD
+
+  # - platform: modbus_controller
+  #   modbus_controller_id: modbus_conroller1
+  #   name: Trip value for voltage/frequency depending on test step
+  #   id: uwAutoTestTripValue
+  #   register_type: read
+  #   address: 74
+  #   unit_of_measurement: 'V/Hz'
+  #   value_type: U_WORD
+  #   filters:
+  #     - multiply: 0.1/0.01
+
+  # - platform: modbus_controller
+  #   modbus_controller_id: modbus_conroller1
+  #   name: Auto test trip time
+  #   id: uwAutoTestTripTime
+  #   register_type: read
+  #   address: 75
+  #   unit_of_measurement: 'ms'
+  #   value_type: U_WORD
+
+  # - platform: modbus_controller
+  #   modbus_controller_id: modbus_conroller1
+  #   name: 'AC input type (Bit0): 0=Grid, 1=Generator for 12KHybrid'
+  #   id: ACInputType
+  #   register_type: read
+  #   address: 77
+  #   value_type: U_WORD
+
+  # - platform: modbus_controller
+  #   modbus_controller_id: modbus_conroller1
+  #   name: 'AC couple inverter flow (Bit1): 0=no flow, 1=show flow'
+  #   id: ACCoupleInverterFlow
+  #   register_type: read
+  #   address: 77
+  #   value_type: U_WORD
+
+  # - platform: modbus_controller
+  #   modbus_controller_id: modbus_conroller1
+  #   name: 'AC couple enable (Bit2): 0=Disable, 1=Enable'
+  #   id: ACCoupleEn
+  #   register_type: read
+  #   address: 77
+  #   value_type: U_WORD
+
+  # - platform: modbus_controller
+  #   modbus_controller_id: modbus_conroller1
+  #   name: Battery type and brand information
+  #   id: BatTypeAndBrand
+  #   register_type: read
+  #   address: 80
+  #   value_type: U_WORD
+
+  # - platform: modbus_controller
+  #   modbus_controller_id: modbus_conroller1
+  #   name: 'Battery communication type: 0=CAN, 1=485'
+  #   id: BatComType
+  #   register_type: read
+  #   address: 80
+  #   value_type: U_WORD
+
+  # - platform: modbus_controller
+  #   modbus_controller_id: modbus_conroller1
+  #   name: The maximum charging current of BMS limits
+  #   id: MaxChgCurr
+  #   icon: mdi:current-ac
+  #   register_type: read
+  #   address: 81
+  #   unit_of_measurement: 'A'
+  #   device_class: current
+  #   value_type: U_WORD
+  #   filters:
+  #     - multiply: 0.01
+
+  # - platform: modbus_controller
+  #   modbus_controller_id: modbus_conroller1
+  #   name: The maximum discharging current of BMS limits
+  #   id: MaxDischgCurr
+  #   icon: mdi:current-ac
+  #   register_type: read
+  #   address: 82
+  #   unit_of_measurement: 'A'
+  #   device_class: current
+  #   value_type: U_WORD
+  #   filters:
+  #     - multiply: 0.01
+
+  # - platform: modbus_controller
+  #   modbus_controller_id: modbus_conroller1
+  #   name: Recommends charging voltage by BMS
+  #   id: ChargeVoltRef
+  #   icon: mdi:lightning-bolt
+  #   register_type: read
+  #   address: 83
+  #   unit_of_measurement: 'V'
+  #   device_class: voltage
+  #   value_type: U_WORD
+  #   filters:
+  #     - multiply: 0.1
+
+  # - platform: modbus_controller
+  #   modbus_controller_id: modbus_conroller1
+  #   name: Recommends a discharging cut-off voltage by BMS
+  #   id: DischgCutVolt
+  #   icon: mdi:lightning-bolt
+  #   register_type: read
+  #   address: 84
+  #   unit_of_measurement: 'V'
+  #   device_class: voltage
+  #   value_type: U_WORD
+  #   filters:
+  #     - multiply: 0.1
+
+  # - platform: modbus_controller
+  #   modbus_controller_id: modbus_conroller1
+  #   name: Status information of BMS
+  #   id: BatStatus0_BMS
+  #   register_type: read
+  #   address: 85
+  #   value_type: U_WORD
+
+  # - platform: modbus_controller
+  #   modbus_controller_id: modbus_conroller1
+  #   name: Status information of BMS
+  #   id: BatStatus1_BMS
+  #   register_type: read
+  #   address: 86
+  #   value_type: U_WORD
+
+  # - platform: modbus_controller
+  #   modbus_controller_id: modbus_conroller1
+  #   name: Status information of BMS
+  #   id: BatStatus2_BMS
+  #   register_type: read
+  #   address: 87
+  #   value_type: U_WORD
+
+  # - platform: modbus_controller
+  #   modbus_controller_id: modbus_conroller1
+  #   name: Status information of BMS
+  #   id: BatStatus3_BMS
+  #   register_type: read
+  #   address: 88
+  #   value_type: U_WORD
+
+  # - platform: modbus_controller
+  #   modbus_controller_id: modbus_conroller1
+  #   name: Status information of BMS
+  #   id: BatStatus4_BMS
+  #   register_type: read
+  #   address: 89
+  #   value_type: U_WORD
+
+  # - platform: modbus_controller
+  #   modbus_controller_id: modbus_conroller1
+  #   name: Status information of BMS
+  #   id: BatStatus5_BMS
+  #   register_type: read
+  #   address: 90
+  #   value_type: U_WORD
+
+  # - platform: modbus_controller
+  #   modbus_controller_id: modbus_conroller1
+  #   name: Status information of BMS
+  #   id: BatStatus6_BMS
+  #   register_type: read
+  #   address: 91
+  #   value_type: U_WORD
+
+  # - platform: modbus_controller
+  #   modbus_controller_id: modbus_conroller1
+  #   name: Status information of BMS
+  #   id: BatStatus7_BMS
+  #   register_type: read
+  #   address: 92
+  #   value_type: U_WORD
+
+  # - platform: modbus_controller
+  #   modbus_controller_id: modbus_conroller1
+  #   name: Status information of BMS
+  #   id: BatStatus8_BMS
+  #   register_type: read
+  #   address: 93
+  #   value_type: U_WORD
+
+  # - platform: modbus_controller
+  #   modbus_controller_id: modbus_conroller1
+  #   name: Status information of BMS
+  #   id: BatStatus9_BMS
+  #   register_type: read
+  #   address: 94
+  #   value_type: U_WORD
+
+  # - platform: modbus_controller
+  #   modbus_controller_id: modbus_conroller1
+  #   name: The inverter aggregates lithium battery status information
+  #   id: BatStatus_INV
+  #   register_type: read
+  #   address: 95
+  #   value_type: U_WORD
+
+  # - platform: modbus_controller
+  #   modbus_controller_id: modbus_conroller1
+  #   name: Number of batteries in parallel
+  #   id: BatParallelNum
+  #   register_type: read
+  #   address: 96
+  #   value_type: U_WORD
+
+  # - platform: modbus_controller
+  #   modbus_controller_id: modbus_conroller1
+  #   name: Battery capacity
+  #   id: BatCapacity
+  #   register_type: read
+  #   address: 97
+  #   unit_of_measurement: 'Ah'
+  #   value_type: U_WORD
+
+  # - platform: modbus_controller
+  #   modbus_controller_id: modbus_conroller1
+  #   name: Battery current, with signed number
+  #   id: BatCurrent_BMS
+  #   icon: mdi:current-ac
+  #   register_type: read
+  #   address: 98
+  #   unit_of_measurement: 'A'
+  #   device_class: current
+  #   value_type: U_WORD
+  #   filters:
+  #     - multiply: 0.01
+
+  # - platform: modbus_controller
+  #   modbus_controller_id: modbus_conroller1
+  #   name: BMS fault code
+  #   id: FaultCode_BMS
+  #   register_type: read
+  #   address: 99
+  #   value_type: U_WORD
+
+  # - platform: modbus_controller
+  #   modbus_controller_id: modbus_conroller1
+  #   name: BMS warning code
+  #   id: WarningCode_BMS
+  #   register_type: read
+  #   address: 100
+  #   value_type: U_WORD
+
+  # - platform: modbus_controller
+  #   modbus_controller_id: modbus_conroller1
+  #   name: Maximum voltage of cell
+  #   id: MaxCellVolt_BMS
+  #   icon: mdi:lightning-bolt
+  #   register_type: read
+  #   address: 101
+  #   unit_of_measurement: 'V'
+  #   device_class: voltage
+  #   value_type: U_WORD
+  #   filters:
+  #     - multiply: 0.001
+
+  # - platform: modbus_controller
+  #   modbus_controller_id: modbus_conroller1
+  #   name: Minimum voltage of cell
+  #   id: MinCellVolt_BMS
+  #   icon: mdi:lightning-bolt
+  #   register_type: read
+  #   address: 102
+  #   unit_of_measurement: 'V'
+  #   device_class: voltage
+  #   value_type: U_WORD
+  #   filters:
+  #     - multiply: 0.001
+
+  # - platform: modbus_controller
+  #   modbus_controller_id: modbus_conroller1
+  #   name: Maximum temperature of cell, with signed number
+  #   id: MaxCellTemp_BMS
+  #   icon: mdi:thermometer
+  #   register_type: read
+  #   address: 103
+  #   unit_of_measurement: '°C'
+  #   device_class: temperature
+  #   value_type: U_WORD
+  #   filters:
+  #     - multiply: 0.1
+
+  # - platform: modbus_controller
+  #   modbus_controller_id: modbus_conroller1
+  #   name: Minimum temperature of cell, with signed number
+  #   id: MinCellTemp_BMS
+  #   icon: mdi:thermometer
+  #   register_type: read
+  #   address: 104
+  #   unit_of_measurement: '°C'
+  #   device_class: temperature
+  #   value_type: U_WORD
+  #   filters:
+  #     - multiply: 0.1
+
+  # - platform: modbus_controller
+  #   modbus_controller_id: modbus_conroller1
+  #   name: 1=Upgrade in process, 2=Upgrade successful, 3=Upgrade failed
+  #   id: BMSFWUpdateState
+  #   register_type: read
+  #   address: 105
+  #   value_type: U_WORD
+
+  # - platform: modbus_controller
+  #   modbus_controller_id: modbus_conroller1
+  #   name: Number of charging/discharging cycles
+  #   id: CycleCnt_BMS
+  #   register_type: read
+  #   address: 106
+  #   value_type: U_WORD
+
+  # - platform: modbus_controller
+  #   modbus_controller_id: modbus_conroller1
+  #   name: Inverter samples the battery voltage
+  #   id: BatVoltSample_INV
+  #   icon: mdi:lightning-bolt
+  #   register_type: read
+  #   address: 107
+  #   unit_of_measurement: 'V'
+  #   device_class: voltage
+  #   value_type: U_WORD
+  #   filters:
+  #     - multiply: 0.1
+
+  # - platform: modbus_controller
+  #   modbus_controller_id: modbus_conroller1
+  #   name: BT temperature for 12k
+  #   id: T1
+  #   icon: mdi:thermometer
+  #   register_type: read
+  #   address: 108
+  #   unit_of_measurement: '°C'
+  #   device_class: temperature
+  #   value_type: U_WORD
+  #   filters:
+  #     - multiply: 0.1
+
+  # - platform: modbus_controller
+  #   modbus_controller_id: modbus_conroller1
+  #   name: Reserved
+  #   id: T2
+  #   icon: mdi:thermometer
+  #   register_type: read
+  #   address: 109
+  #   unit_of_measurement: '°C'
+  #   device_class: temperature
+  #   value_type: U_WORD
+  #   filters:
+  #     - multiply: 0.1
+
+  # - platform: modbus_controller
+  #   modbus_controller_id: modbus_conroller1
+  #   name: Reserved
+  #   id: T3
+  #   icon: mdi:thermometer
+  #   register_type: read
+  #   address: 110
+  #   unit_of_measurement: '°C'
+  #   device_class: temperature
+  #   value_type: U_WORD
+  #   filters:
+  #     - multiply: 0.1
+
+  # - platform: modbus_controller
+  #   modbus_controller_id: modbus_conroller1
+  #   name: Reserved
+  #   id: T4
+  #   icon: mdi:thermometer
+  #   register_type: read
+  #   address: 111
+  #   unit_of_measurement: '°C'
+  #   device_class: temperature
+  #   value_type: U_WORD
+  #   filters:
+  #     - multiply: 0.1
+
+  # - platform: modbus_controller
+  #   modbus_controller_id: modbus_conroller1
+  #   name: Reserved
+  #   id: T5
+  #   icon: mdi:thermometer
+  #   register_type: read
+  #   address: 112
+  #   unit_of_measurement: '°C'
+  #   device_class: temperature
+  #   value_type: U_WORD
+  #   filters:
+  #     - multiply: 0.1
+
+number:
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Generator Charging Starts
+    id: GenChgStartSOC
+    icon: mdi:generator-stationary
+    register_type: holding
+    address: 196
+    unit_of_measurement: '%'
+    device_class: battery
+    min_value: 0
+    max_value: 90
+    step: 5
+    value_type: U_WORD
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Generator Charging Ends
+    id: GenChgEndSOC
+    icon: mdi:generator-stationary
+    register_type: holding
+    address: 197
+    unit_of_measurement: '%'
+    device_class: battery
+    min_value: 20
+    max_value: 100
+    step: 5
+    value_type: U_WORD
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: AC Charging Ends
+    id: ACChgSOCLimit
+    icon: mdi:battery-charging
+    register_type: holding
+    address: 67
+    unit_of_measurement: '%'
+    device_class: battery
+    min_value: 0
+    max_value: 100
+    step: 5
+    value_type: U_WORD
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    name: Cut SOC for discharging
+    id: CutSOCDischarge
+    icon: mdi:battery-charging-20
+    register_type: holding
+    address: 105
+    unit_of_measurement: '%'
+    device_class: battery
+    min_value: 10
+    max_value: 90
+    step: 5
+    value_type: U_WORD
+
