@@ -60,7 +60,7 @@ The primary motivations for this modification include:
 It has been confirmed that both the **WiFi** and the **WiFi + Ethernet**
 versions of the dongles are based on the **ESP32** microcontroller.
 
-- **WiFi + Ethernet Dongle:** Features an **ESP32-WROOM-32UE** module, an
+- **WiFi + Ethernet Dongle:** Features an **ESP32-WROOM-32UE** or **ESP32-D0WD-V3** module, an
   SN65176B RS485 transceiver, and an IP101GR Ethernet controller.
 - **WiFi Dongle:** While simpler, it also utilizes an **ESP32-C3** chip, making
   the flashing process virtually identical across both hardware versions.
