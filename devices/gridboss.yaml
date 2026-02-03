@@ -1,3 +1,100 @@
+# add to esphome:
+#  includes:
+#    - modbus/gridboss.h
+
+number:
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    id: smartLoadOnOff
+    internal: true
+    register_type: holding
+    address: 20
+    value_type: U_WORD
+    min_value: 0x0000
+    max_value: 0xFFFF
+    step: 1
+    on_value: 
+      then:
+        - lambda: sync_smart_loads();
+
+  - platform: modbus_controller
+    modbus_controller_id: modbus_conroller1
+    id: smartLoadExtraSettings
+    internal: true
+    register_type: holding
+    address: 229
+    value_type: U_WORD
+    min_value: 0x0000
+    max_value: 0xFFFF
+    step: 1
+    on_value: 
+      then:
+        - lambda: sync_smart_loads();
+
+switch:
+  - platform: template
+    name: Smart Load 1
+    id: smartLoad1On
+    icon: mdi:power-plug
+    optimistic: True
+    turn_on_action: 
+      then:
+        - lambda: |-
+            set_bits(id(smartLoadOnOff), 0x0003 << 0, 0x0001 << 0);
+            set_bits(id(smartLoadExtraSettings), 0x0011 << 0, 0x0011 << 0);
+    turn_off_action:
+      then:
+        - lambda: |-
+            set_bits(id(smartLoadOnOff), 0x0003 << 0, 0);
+
+  - platform: template
+    name: Smart Load 2
+    id: smartLoad2On
+    icon: mdi:power-plug
+    optimistic: True
+    disabled_by_default: True
+    turn_on_action: 
+      then:
+        - lambda: |-
+            set_bits(id(smartLoadOnOff), 0x0003 << 2, 0x0001 << 2);
+            set_bits(id(smartLoadExtraSettings), 0x0011 << 1, 0x0011 << 1);
+    turn_off_action:
+      then:
+        - lambda: |-
+            set_bits(id(smartLoadOnOff), 0x0003 << 2, 0);
+
+  - platform: template
+    name: Smart Load 3
+    id: smartLoad3On
+    icon: mdi:power-plug
+    optimistic: True
+    disabled_by_default: True
+    turn_on_action: 
+      then:
+        - lambda: |-
+            set_bits(id(smartLoadOnOff), 0x0003 << 4, 0x0001 << 4);
+            set_bits(id(smartLoadExtraSettings), 0x0011 << 2, 0x0011 << 2);
+    turn_off_action:
+      then:
+        - lambda: |-
+            set_bits(id(smartLoadOnOff), 0x0003 << 4, 0);
+
+  - platform: template
+    name: Smart Load 4
+    id: smartLoad4On
+    icon: mdi:power-plug
+    optimistic: True
+    disabled_by_default: True
+    turn_on_action: 
+      then:
+        - lambda: |-
+            set_bits(id(smartLoadOnOff), 0x0003 << 6, 0x0001 << 6);
+            set_bits(id(smartLoadExtraSettings), 0x0011 << 3, 0x0011 << 3);
+    turn_off_action:
+      then:
+        - lambda: |-
+            set_bits(id(smartLoadOnOff), 0x0003 << 6, 0);
+
 text_sensor:
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
