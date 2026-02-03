@@ -4,6 +4,7 @@ text_sensor:
     name: Serial Number
     id: serialNumber
     icon: mdi:card-text-outline
+    entity_category: diagnostic
     register_type: holding
     address: 2
     response_size: 10
@@ -29,6 +30,7 @@ text_sensor:
     name: Firmware Version
     id: firmwareVersion
     icon: mdi:card-text-outline
+    entity_category: diagnostic
     register_type: holding
     address: 7
     response_size: 6
@@ -53,7 +55,6 @@ sensor:
     icon: mdi:lightning-bolt
     register_type: read
     address: 1
-    register_count: 127
     unit_of_measurement: 'V'
     device_class: voltage
     value_type: U_WORD
@@ -275,7 +276,7 @@ sensor:
     icon: mdi:current-ac
     register_type: read
     address: 18
-    internal: True
+    disabled_by_default: true
     unit_of_measurement: 'A'
     device_class: current
     value_type: U_WORD
@@ -289,7 +290,7 @@ sensor:
     icon: mdi:current-ac
     register_type: read
     address: 19
-    internal: True
+    disabled_by_default: true
     unit_of_measurement: 'A'
     device_class: current
     value_type: U_WORD
@@ -303,7 +304,7 @@ sensor:
     icon: mdi:current-ac
     register_type: read
     address: 20
-    internal: True
+    disabled_by_default: true
     unit_of_measurement: 'A'
     device_class: current
     value_type: U_WORD
@@ -317,7 +318,7 @@ sensor:
     icon: mdi:current-ac
     register_type: read
     address: 21
-    internal: True
+    disabled_by_default: true
     unit_of_measurement: 'A'
     device_class: current
     value_type: U_WORD
@@ -331,7 +332,7 @@ sensor:
     icon: mdi:current-ac
     register_type: read
     address: 22
-    internal: True
+    disabled_by_default: true
     unit_of_measurement: 'A'
     device_class: current
     value_type: U_WORD
@@ -345,7 +346,7 @@ sensor:
     icon: mdi:current-ac
     register_type: read
     address: 23
-    internal: True
+    disabled_by_default: true
     unit_of_measurement: 'A'
     device_class: current
     value_type: U_WORD
@@ -359,7 +360,7 @@ sensor:
     icon: mdi:current-ac
     register_type: read
     address: 24
-    internal: True
+    disabled_by_default: true
     unit_of_measurement: 'A'
     device_class: current
     value_type: U_WORD
@@ -373,7 +374,7 @@ sensor:
     icon: mdi:current-ac
     register_type: read
     address: 25
-    internal: True
+    disabled_by_default: true
     unit_of_measurement: 'A'
     device_class: current
     value_type: U_WORD
@@ -392,6 +393,9 @@ sensor:
     value_type: S_WORD
     filters:
       - multiply: 1
+    on_value:
+      then:
+        - component.update: gridActivePower
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -405,6 +409,18 @@ sensor:
     value_type: S_WORD
     filters:
       - multiply: 1
+    on_value:
+      then:
+        - component.update: gridActivePower
+
+  - platform: template
+    name: Grid active power
+    id: gridActivePower
+    icon: mdi:power
+    unit_of_measurement: 'W'
+    device_class: power
+    lambda: |-
+      return id(gridL1ActivePower).state + id(gridL2ActivePower).state;
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -418,6 +434,9 @@ sensor:
     value_type: S_WORD
     filters:
       - multiply: 1
+    on_value:
+      then:
+        - component.update: loadActivePower
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -431,7 +450,19 @@ sensor:
     value_type: S_WORD
     filters:
       - multiply: 1
+    on_value:
+      then:
+        - component.update: loadActivePower
 
+  - platform: template
+    name: Load active power
+    id: loadActivePower
+    icon: mdi:power
+    unit_of_measurement: 'W'
+    device_class: power
+    lambda: |-
+      return id(loadL1ActivePower).state + id(loadL2ActivePower).state;
+  
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
     name: Generator L1 active power
@@ -444,6 +475,9 @@ sensor:
     value_type: S_WORD
     filters:
       - multiply: 1
+    on_value:
+      then:
+        - component.update: genActivePower
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -457,6 +491,18 @@ sensor:
     value_type: S_WORD
     filters:
       - multiply: 1
+    on_value:
+      then:
+        - component.update: genActivePower
+
+  - platform: template
+    name: Generator active power
+    id: genActivePower
+    icon: mdi:power
+    unit_of_measurement: 'W'
+    device_class: power
+    lambda: |-
+      return id(genL1ActivePower).state + id(genL2ActivePower).state;
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -470,6 +516,9 @@ sensor:
     value_type: S_WORD
     filters:
       - multiply: 1
+    on_value:
+      then:
+        - component.update: upsActivePower
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -483,6 +532,18 @@ sensor:
     value_type: S_WORD
     filters:
       - multiply: 1
+    on_value:
+      then:
+        - component.update: upsActivePower
+
+  - platform: template
+    name: UPS active power
+    id: upsActivePower
+    icon: mdi:power
+    unit_of_measurement: 'W'
+    device_class: power
+    lambda: |-
+      return id(upsL1ActivePower).state + id(upsL2ActivePower).state;
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -491,12 +552,14 @@ sensor:
     icon: mdi:power
     register_type: read
     address: 34
-    internal: True
     unit_of_measurement: 'W'
     device_class: power
     value_type: S_WORD
     filters:
       - multiply: 1
+    on_value:
+      then:
+        - component.update: smartLoad1ActivePower
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -505,12 +568,23 @@ sensor:
     icon: mdi:power
     register_type: read
     address: 35
-    internal: True
     unit_of_measurement: 'W'
     device_class: power
     value_type: S_WORD
     filters:
       - multiply: 1
+    on_value:
+      then:
+        - component.update: smartLoad1ActivePower
+
+  - platform: template
+    name: Smart Load 1 active power
+    id: smartLoad1ActivePower
+    icon: mdi:power
+    unit_of_measurement: 'W'
+    device_class: power
+    lambda: |-
+      return id(smartLoad1L1ActivePower).state + id(smartLoad1L2ActivePower).state;
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -519,12 +593,15 @@ sensor:
     icon: mdi:power
     register_type: read
     address: 36
-    internal: True
+    disabled_by_default: true
     unit_of_measurement: 'W'
     device_class: power
     value_type: S_WORD
     filters:
       - multiply: 1
+    on_value:
+      then:
+        - component.update: smartLoad2ActivePower
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -533,12 +610,25 @@ sensor:
     icon: mdi:power
     register_type: read
     address: 37
-    internal: True
+    disabled_by_default: true
     unit_of_measurement: 'W'
     device_class: power
     value_type: S_WORD
     filters:
       - multiply: 1
+    on_value:
+      then:
+        - component.update: smartLoad2ActivePower
+
+  - platform: template
+    name: Smart Load 2 active power
+    id: smartLoad2ActivePower
+    icon: mdi:power
+    disabled_by_default: true
+    unit_of_measurement: 'W'
+    device_class: power
+    lambda: |-
+      return id(smartLoad2L1ActivePower).state + id(smartLoad2L2ActivePower).state;
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -547,12 +637,15 @@ sensor:
     icon: mdi:power
     register_type: read
     address: 38
-    internal: True
+    disabled_by_default: true
     unit_of_measurement: 'W'
     device_class: power
     value_type: S_WORD
     filters:
       - multiply: 1
+    on_value:
+      then:
+        - component.update: smartLoad3ActivePower
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -561,12 +654,25 @@ sensor:
     icon: mdi:power
     register_type: read
     address: 39
-    internal: True
+    disabled_by_default: true
     unit_of_measurement: 'W'
     device_class: power
     value_type: S_WORD
     filters:
       - multiply: 1
+    on_value:
+      then:
+        - component.update: smartLoad3ActivePower
+
+  - platform: template
+    name: Smart Load 3 active power
+    id: smartLoad3ActivePower
+    icon: mdi:power
+    disabled_by_default: true
+    unit_of_measurement: 'W'
+    device_class: power
+    lambda: |-
+      return id(smartLoad3L1ActivePower).state + id(smartLoad3L2ActivePower).state;
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -575,12 +681,15 @@ sensor:
     icon: mdi:power
     register_type: read
     address: 40
-    internal: True
+    disabled_by_default: true
     unit_of_measurement: 'W'
     device_class: power
     value_type: S_WORD
     filters:
       - multiply: 1
+    on_value:
+      then:
+        - component.update: smartLoad4ActivePower
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -589,12 +698,25 @@ sensor:
     icon: mdi:power
     register_type: read
     address: 41
-    internal: True
+    disabled_by_default: true
     unit_of_measurement: 'W'
     device_class: power
     value_type: S_WORD
     filters:
       - multiply: 1
+    on_value:
+      then:
+        - component.update: smartLoad4ActivePower
+
+  - platform: template
+    name: Smart Load 4 active power
+    id: smartLoad4ActivePower
+    icon: mdi:power
+    disabled_by_default: true
+    unit_of_measurement: 'W'
+    device_class: power
+    lambda: |-
+      return id(smartLoad4L1ActivePower).state + id(smartLoad4L2ActivePower).state;
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -608,6 +730,9 @@ sensor:
     value_type: U_WORD
     filters:
       - multiply: 0.1
+    on_value:
+      then:
+        - component.update: eLoadToday
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -621,6 +746,18 @@ sensor:
     value_type: U_WORD
     filters:
       - multiply: 0.1
+    on_value:
+      then:
+        - component.update: eLoadToday
+
+  - platform: template
+    name: Load energy today
+    id: eLoadToday
+    icon: mdi:meter-electric
+    unit_of_measurement: 'kWh'
+    device_class: energy
+    lambda: |-
+      return id(eLoadTodayL1).state + id(eLoadTodayL2).state;
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -634,6 +771,9 @@ sensor:
     value_type: U_WORD
     filters:
       - multiply: 0.1
+    on_value:
+      then:
+        - component.update: eUpsToday
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -647,6 +787,18 @@ sensor:
     value_type: U_WORD
     filters:
       - multiply: 0.1
+    on_value:
+      then:
+        - component.update: eUpsToday
+
+  - platform: template
+    name: UPS energy today
+    id: eUpsToday
+    icon: mdi:meter-electric
+    unit_of_measurement: 'kWh'
+    device_class: energy
+    lambda: |-
+      return id(eUpsTodayL1).state + id(eUpsTodayL2).state;
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -663,7 +815,7 @@ sensor:
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
-    name: Energy to user today L1
+    name: Energy to user today
     id: eToUserToday
     icon: mdi:meter-electric
     register_type: read
@@ -676,7 +828,7 @@ sensor:
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
-    name: Energy Generator
+    name: Energy Generator today
     id: eGenToday
     icon: mdi:meter-electric
     register_type: read
@@ -694,12 +846,14 @@ sensor:
     icon: mdi:meter-electric
     register_type: read
     address: 50
-    internal: True
     unit_of_measurement: 'kWh'
     device_class: energy
     value_type: U_WORD
     filters:
       - multiply: 0.1
+    on_value:
+      then:
+        - component.update: eSmartLoad1Today
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -708,12 +862,23 @@ sensor:
     icon: mdi:meter-electric
     register_type: read
     address: 51
-    internal: True
     unit_of_measurement: 'kWh'
     device_class: energy
     value_type: U_WORD
     filters:
       - multiply: 0.1
+    on_value:
+      then:
+        - component.update: eSmartLoad1Today
+
+  - platform: template
+    name: Smart Load 1 energy today
+    id: eSmartLoad1Today
+    icon: mdi:meter-electric
+    unit_of_measurement: 'kWh'
+    device_class: energy
+    lambda: |-
+      return id(eSmartLoad1TodayL1).state + id(eSmartLoad1TodayL2).state;
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -722,12 +887,15 @@ sensor:
     icon: mdi:meter-electric
     register_type: read
     address: 52
-    internal: True
+    disabled_by_default: true
     unit_of_measurement: 'kWh'
     device_class: energy
     value_type: U_WORD
     filters:
       - multiply: 0.1
+    on_value:
+      then:
+        - component.update: eSmartLoad2Today
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -736,12 +904,25 @@ sensor:
     icon: mdi:meter-electric
     register_type: read
     address: 53
-    internal: True
+    disabled_by_default: true
     unit_of_measurement: 'kWh'
     device_class: energy
     value_type: U_WORD
     filters:
       - multiply: 0.1
+    on_value:
+      then:
+        - component.update: eSmartLoad2Today
+
+  - platform: template
+    name: Smart Load 2 energy today
+    id: eSmartLoad2Today
+    icon: mdi:meter-electric
+    disabled_by_default: true
+    unit_of_measurement: 'kWh'
+    device_class: energy
+    lambda: |-
+      return id(eSmartLoad2TodayL1).state + id(eSmartLoad2TodayL2).state;
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -750,12 +931,15 @@ sensor:
     icon: mdi:meter-electric
     register_type: read
     address: 54
-    internal: True
+    disabled_by_default: true
     unit_of_measurement: 'kWh'
     device_class: energy
     value_type: U_WORD
     filters:
       - multiply: 0.1
+    on_value:
+      then:
+        - component.update: eSmartLoad3Today
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -764,12 +948,25 @@ sensor:
     icon: mdi:meter-electric
     register_type: read
     address: 55
-    internal: True
+    disabled_by_default: true
     unit_of_measurement: 'kWh'
     device_class: energy
     value_type: U_WORD
     filters:
       - multiply: 0.1
+    on_value:
+      then:
+        - component.update: eSmartLoad3Today
+
+  - platform: template
+    name: Smart Load 3 energy today
+    id: eSmartLoad3Today
+    icon: mdi:meter-electric
+    disabled_by_default: true
+    unit_of_measurement: 'kWh'
+    device_class: energy
+    lambda: |-
+      return id(eSmartLoad3TodayL1).state + id(eSmartLoad3TodayL2).state;
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -778,12 +975,15 @@ sensor:
     icon: mdi:meter-electric
     register_type: read
     address: 56
-    internal: True
+    disabled_by_default: true
     unit_of_measurement: 'kWh'
     device_class: energy
     value_type: U_WORD
     filters:
       - multiply: 0.1
+    on_value:
+      then:
+        - component.update: eSmartLoad4Today
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -792,12 +992,25 @@ sensor:
     icon: mdi:meter-electric
     register_type: read
     address: 57
-    internal: True
+    disabled_by_default: true
     unit_of_measurement: 'kWh'
     device_class: energy
     value_type: U_WORD
     filters:
       - multiply: 0.1
+    on_value:
+      then:
+        - component.update: eSmartLoad4Today
+
+  - platform: template
+    name: Smart Load 4 energy today
+    id: eSmartLoad4Today
+    icon: mdi:meter-electric
+    disabled_by_default: true
+    unit_of_measurement: 'kWh'
+    device_class: energy
+    lambda: |-
+      return id(eSmartLoad4TodayL1).state + id(eSmartLoad4TodayL2).state;
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -806,12 +1019,15 @@ sensor:
     icon: mdi:meter-electric
     register_type: read
     address: 58
-    internal: True
+    disabled_by_default: true
     unit_of_measurement: 'kWh'
     device_class: energy
     value_type: U_WORD
     filters:
       - multiply: 0.1
+    on_value:
+      then:
+        - component.update: eACcouple1Today
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -820,12 +1036,25 @@ sensor:
     icon: mdi:meter-electric
     register_type: read
     address: 59
-    internal: True
+    disabled_by_default: true
     unit_of_measurement: 'kWh'
     device_class: energy
     value_type: U_WORD
     filters:
       - multiply: 0.1
+    on_value:
+      then:
+        - component.update: eACcouple1Today
+
+  - platform: template
+    name: AC couple 1 energy today
+    id: eACcouple1Today
+    icon: mdi:meter-electric
+    disabled_by_default: true
+    unit_of_measurement: 'kWh'
+    device_class: energy
+    lambda: |-
+      return id(eACcouple1TodayL1).state + id(eACcouple1TodayL2).state;
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -834,12 +1063,15 @@ sensor:
     icon: mdi:meter-electric
     register_type: read
     address: 60
-    internal: True
+    disabled_by_default: true
     unit_of_measurement: 'kWh'
     device_class: energy
     value_type: U_WORD
     filters:
       - multiply: 0.1
+    on_value:
+      then:
+        - component.update: eACcouple2Today
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -848,12 +1080,25 @@ sensor:
     icon: mdi:meter-electric
     register_type: read
     address: 61
-    internal: True
+    disabled_by_default: true
     unit_of_measurement: 'kWh'
     device_class: energy
     value_type: U_WORD
     filters:
       - multiply: 0.1
+    on_value:
+      then:
+        - component.update: eACcouple2Today
+
+  - platform: template
+    name: AC couple 2 energy today
+    id: eACcouple2Today
+    icon: mdi:meter-electric
+    disabled_by_default: true
+    unit_of_measurement: 'kWh'
+    device_class: energy
+    lambda: |-
+      return id(eACcouple2TodayL1).state + id(eACcouple2TodayL2).state;
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -862,12 +1107,15 @@ sensor:
     icon: mdi:meter-electric
     register_type: read
     address: 62
-    internal: True
+    disabled_by_default: true
     unit_of_measurement: 'kWh'
     device_class: energy
     value_type: U_WORD
     filters:
       - multiply: 0.1
+    on_value:
+      then:
+        - component.update: eACcouple3Today
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -876,12 +1124,25 @@ sensor:
     icon: mdi:meter-electric
     register_type: read
     address: 63
-    internal: True
+    disabled_by_default: true
     unit_of_measurement: 'kWh'
     device_class: energy
     value_type: U_WORD
     filters:
       - multiply: 0.1
+    on_value:
+      then:
+        - component.update: eACcouple3Today
+
+  - platform: template
+    name: AC couple 3 energy today
+    id: eACcouple3Today
+    icon: mdi:meter-electric
+    disabled_by_default: true
+    unit_of_measurement: 'kWh'
+    device_class: energy
+    lambda: |-
+      return id(eACcouple3TodayL1).state + id(eACcouple3TodayL2).state;
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -890,12 +1151,15 @@ sensor:
     icon: mdi:meter-electric
     register_type: read
     address: 64
-    internal: True
+    disabled_by_default: true
     unit_of_measurement: 'kWh'
     device_class: energy
     value_type: U_WORD
     filters:
       - multiply: 0.1
+    on_value:
+      then:
+        - component.update: eACcouple4Today
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -904,12 +1168,25 @@ sensor:
     icon: mdi:meter-electric
     register_type: read
     address: 65
-    internal: True
+    disabled_by_default: true
     unit_of_measurement: 'kWh'
     device_class: energy
     value_type: U_WORD
     filters:
       - multiply: 0.1
+    on_value:
+      then:
+        - component.update: eACcouple4Today
+
+  - platform: template
+    name: AC couple 4 energy today
+    id: eACcouple4Today
+    icon: mdi:meter-electric
+    disabled_by_default: true
+    unit_of_measurement: 'kWh'
+    device_class: energy
+    lambda: |-
+      return id(eACcouple4TodayL1).state + id(eACcouple4TodayL2).state;
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -924,6 +1201,9 @@ sensor:
     value_type: S_DWORD_R
     filters:
       - multiply: 0.1
+    on_value:
+      then:
+        - component.update: eLoadTotal
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -938,6 +1218,19 @@ sensor:
     value_type: S_DWORD_R
     filters:
       - multiply: 0.1
+    on_value:
+      then:
+        - component.update: eLoadTotal
+
+  - platform: template
+    name: Total load energy
+    id: eLoadTotal
+    icon: mdi:meter-electric
+    unit_of_measurement: 'kWh'
+    state_class: total_increasing
+    device_class: energy
+    lambda: |-
+      return id(eLoadTotalL1).state + id(eLoadTotalL2).state;
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -952,6 +1245,9 @@ sensor:
     value_type: S_DWORD_R
     filters:
       - multiply: 0.1
+    on_value:
+      then:
+        - component.update: eUpsTotal
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -966,6 +1262,19 @@ sensor:
     value_type: S_DWORD_R
     filters:
       - multiply: 0.1
+    on_value:
+      then:
+        - component.update: eUpsTotal
+
+  - platform: template
+    name: Total UPS energy
+    id: eUpsTotal
+    icon: mdi:meter-electric
+    unit_of_measurement: 'kWh'
+    state_class: total_increasing
+    device_class: energy
+    lambda: |-
+      return id(eUpsTotalL1).state + id(eUpsTotalL2).state;
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -980,6 +1289,9 @@ sensor:
     value_type: S_DWORD_R
     filters:
       - multiply: 0.1
+    on_value:
+      then:
+        - component.update: eToGridTotal
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -994,6 +1306,19 @@ sensor:
     value_type: S_DWORD_R
     filters:
       - multiply: 0.1
+    on_value:
+      then:
+        - component.update: eToGridTotal
+
+  - platform: template
+    name: Total energy to grid
+    id: eToGridTotal
+    icon: mdi:meter-electric
+    unit_of_measurement: 'kWh'
+    state_class: total_increasing
+    device_class: energy
+    lambda: |-
+      return id(eToGridTotalL1).state + id(eToGridTotalL2).state;
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -1008,6 +1333,9 @@ sensor:
     value_type: S_DWORD_R
     filters:
       - multiply: 0.1
+    on_value:
+      then:
+        - component.update: eToUserTotal
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -1022,6 +1350,19 @@ sensor:
     value_type: S_DWORD_R
     filters:
       - multiply: 0.1
+    on_value:
+      then:
+        - component.update: eToUserTotal
+
+  - platform: template
+    name: Total energy to user
+    id: eToUserTotal
+    icon: mdi:meter-electric
+    unit_of_measurement: 'kWh'
+    state_class: total_increasing
+    device_class: energy
+    lambda: |-
+      return id(eToUserTotalL1).state + id(eToUserTotalL2).state;
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -1036,6 +1377,9 @@ sensor:
     value_type: S_DWORD_R
     filters:
       - multiply: 0.1
+    on_value:
+      then:
+        - component.update: eGenTotal
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -1050,6 +1394,19 @@ sensor:
     value_type: S_DWORD_R
     filters:
       - multiply: 0.1
+    on_value:
+      then:
+        - component.update: eGenTotal
+
+  - platform: template
+    name: Total energy Generator
+    id: eGenTotal
+    icon: mdi:meter-electric
+    unit_of_measurement: 'kWh'
+    state_class: total_increasing
+    device_class: energy
+    lambda: |-
+      return id(eGenTotalL1).state + id(eGenTotalL2).state;
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -1064,6 +1421,9 @@ sensor:
     value_type: S_DWORD_R
     filters:
       - multiply: 0.1
+    on_value:
+      then:
+        - component.update: eSmartLoad1Total
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -1072,13 +1432,27 @@ sensor:
     icon: mdi:meter-electric
     register_type: read
     address: 90
-    internal: True
+    disabled_by_default: true
     unit_of_measurement: 'kWh'
     state_class: total_increasing
     device_class: energy
     value_type: S_DWORD_R
     filters:
       - multiply: 0.1
+    on_value:
+      then:
+        - component.update: eSmartLoad1Total
+
+  - platform: template
+    name: Total Smart Load 1 energy
+    id: eSmartLoad1Total
+    icon: mdi:meter-electric
+    disabled_by_default: true
+    unit_of_measurement: 'kWh'
+    state_class: total_increasing
+    device_class: energy
+    lambda: |-
+      return id(eSmartLoad1TotalL1).state + id(eSmartLoad1TotalL2).state;
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -1087,13 +1461,16 @@ sensor:
     icon: mdi:meter-electric
     register_type: read
     address: 92
-    internal: True
+    disabled_by_default: true
     unit_of_measurement: 'kWh'
     state_class: total_increasing
     device_class: energy
     value_type: S_DWORD_R
     filters:
       - multiply: 0.1
+    on_value:
+      then:
+        - component.update: eSmartLoad2Total
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -1102,13 +1479,27 @@ sensor:
     icon: mdi:meter-electric
     register_type: read
     address: 94
-    internal: True
+    disabled_by_default: true
     unit_of_measurement: 'kWh'
     state_class: total_increasing
     device_class: energy
     value_type: S_DWORD_R
     filters:
       - multiply: 0.1
+    on_value:
+      then:
+        - component.update: eSmartLoad2Total
+
+  - platform: template
+    name: Total Smart Load 2 energy
+    id: eSmartLoad2Total
+    icon: mdi:meter-electric
+    disabled_by_default: true
+    unit_of_measurement: 'kWh'
+    state_class: total_increasing
+    device_class: energy
+    lambda: |-
+      return id(eSmartLoad2TotalL1).state + id(eSmartLoad2TotalL2).state;
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -1117,13 +1508,16 @@ sensor:
     icon: mdi:meter-electric
     register_type: read
     address: 96
-    internal: True
+    disabled_by_default: true
     unit_of_measurement: 'kWh'
     state_class: total_increasing
     device_class: energy
     value_type: S_DWORD_R
     filters:
       - multiply: 0.1
+    on_value:
+      then:
+        - component.update: eSmartLoad3Total
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -1132,13 +1526,27 @@ sensor:
     icon: mdi:meter-electric
     register_type: read
     address: 98
-    internal: True
+    disabled_by_default: true
     unit_of_measurement: 'kWh'
     state_class: total_increasing
     device_class: energy
     value_type: S_DWORD_R
     filters:
       - multiply: 0.1
+    on_value:
+      then:
+        - component.update: eSmartLoad3Total
+
+  - platform: template
+    name: Total Smart Load 3 energy
+    id: eSmartLoad3Total
+    icon: mdi:meter-electric
+    disabled_by_default: true
+    unit_of_measurement: 'kWh'
+    state_class: total_increasing
+    device_class: energy
+    lambda: |-
+      return id(eSmartLoad3TotalL1).state + id(eSmartLoad3TotalL2).state;
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -1147,13 +1555,16 @@ sensor:
     icon: mdi:meter-electric
     register_type: read
     address: 100
-    internal: True
+    disabled_by_default: true
     unit_of_measurement: 'kWh'
     state_class: total_increasing
     device_class: energy
     value_type: S_DWORD_R
     filters:
       - multiply: 0.1
+    on_value:
+      then:
+        - component.update: eSmartLoad4Total
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -1162,13 +1573,27 @@ sensor:
     icon: mdi:meter-electric
     register_type: read
     address: 102
-    internal: True
+    disabled_by_default: true
     unit_of_measurement: 'kWh'
     state_class: total_increasing
     device_class: energy
     value_type: S_DWORD_R
     filters:
       - multiply: 0.1
+    on_value:
+      then:
+        - component.update: eSmartLoad4Total
+
+  - platform: template
+    name: Total Smart Load 4 energy
+    id: eSmartLoad4Total
+    icon: mdi:meter-electric
+    disabled_by_default: true
+    unit_of_measurement: 'kWh'
+    state_class: total_increasing
+    device_class: energy
+    lambda: |-
+      return id(eSmartLoad4TotalL1).state + id(eSmartLoad4TotalL2).state;
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -1177,13 +1602,16 @@ sensor:
     icon: mdi:meter-electric
     register_type: read
     address: 104
-    internal: True
+    disabled_by_default: true
     unit_of_measurement: 'kWh'
     state_class: total_increasing
     device_class: energy
     value_type: S_DWORD_R
     filters:
       - multiply: 0.1
+    on_value:
+      then:
+        - component.update: eACcouple1Total
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -1192,13 +1620,27 @@ sensor:
     icon: mdi:meter-electric
     register_type: read
     address: 106
-    internal: True
+    disabled_by_default: true
     unit_of_measurement: 'kWh'
     state_class: total_increasing
     device_class: energy
     value_type: S_DWORD_R
     filters:
       - multiply: 0.1
+    on_value:
+      then:
+        - component.update: eACcouple1Total
+
+  - platform: template
+    name: Total AC couple 1 energy
+    id: eACcouple1Total
+    icon: mdi:meter-electric
+    disabled_by_default: true
+    unit_of_measurement: 'kWh'
+    state_class: total_increasing
+    device_class: energy
+    lambda: |-
+      return id(eACcouple1TotalL1).state + id(eACcouple1TotalL2).state;
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -1207,13 +1649,16 @@ sensor:
     icon: mdi:meter-electric
     register_type: read
     address: 108
-    internal: True
+    disabled_by_default: true
     unit_of_measurement: 'kWh'
     state_class: total_increasing
     device_class: energy
     value_type: S_DWORD_R
     filters:
       - multiply: 0.1
+    on_value:
+      then:
+        - component.update: eACcouple2Total
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -1222,13 +1667,27 @@ sensor:
     icon: mdi:meter-electric
     register_type: read
     address: 110
-    internal: True
+    disabled_by_default: true
     unit_of_measurement: 'kWh'
     state_class: total_increasing
     device_class: energy
     value_type: S_DWORD_R
     filters:
       - multiply: 0.1
+    on_value:
+      then:
+        - component.update: eACcouple2Total
+
+  - platform: template
+    name: Total AC couple 2 energy
+    id: eACcouple2Total
+    icon: mdi:meter-electric
+    disabled_by_default: true
+    unit_of_measurement: 'kWh'
+    state_class: total_increasing
+    device_class: energy
+    lambda: |-
+      return id(eACcouple2TotalL1).state + id(eACcouple2TotalL2).state;
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -1237,13 +1696,16 @@ sensor:
     icon: mdi:meter-electric
     register_type: read
     address: 112
-    internal: True
+    disabled_by_default: true
     unit_of_measurement: 'kWh'
     state_class: total_increasing
     device_class: energy
     value_type: S_DWORD_R
     filters:
       - multiply: 0.1
+    on_value:
+      then:
+        - component.update: eACcouple3Total
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -1252,13 +1714,28 @@ sensor:
     icon: mdi:meter-electric
     register_type: read
     address: 114
-    internal: True
+    disabled_by_default: true
     unit_of_measurement: 'kWh'
     state_class: total_increasing
     device_class: energy
     value_type: S_DWORD_R
     filters:
       - multiply: 0.1
+    on_value:
+      then:
+        - component.update: eACcouple3Total
+
+  - platform: template
+    name: Total AC couple 3 energy
+    id: eACcouple3Total
+    icon: mdi:meter-electric
+    disabled_by_default: true
+    unit_of_measurement: 'kWh'
+    state_class: total_increasing
+    device_class: energy
+    lambda: |-
+      return id(eACcouple3TotalL1).state + id(eACcouple3TotalL2).state;
+
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -1267,13 +1744,16 @@ sensor:
     icon: mdi:meter-electric
     register_type: read
     address: 116
-    internal: True
+    disabled_by_default: true
     unit_of_measurement: 'kWh'
     state_class: total_increasing
     device_class: energy
     value_type: S_DWORD_R
     filters:
       - multiply: 0.1
+    on_value:
+      then:
+        - component.update: eACcouple4Total
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -1282,27 +1762,27 @@ sensor:
     icon: mdi:meter-electric
     register_type: read
     address: 118
-    internal: True
+    disabled_by_default: true
     unit_of_measurement: 'kWh'
     state_class: total_increasing
     device_class: energy
     value_type: S_DWORD_R
     filters:
       - multiply: 0.1
+    on_value:
+      then:
+        - component.update: eACcouple4Total
 
-  - platform: modbus_controller
-    modbus_controller_id: modbus_conroller1
-    name: Half BUS voltage
-    id: vbusP
-    icon: mdi:lightning-bolt
-    register_type: read
-    address: 120
-    internal: True
-    unit_of_measurement: 'V'
-    device_class: voltage
-    value_type: U_WORD
-    filters:
-      - multiply: 0.1
+  - platform: template
+    name: Total AC couple 4 energy
+    id: eACcouple4Total
+    icon: mdi:meter-electric
+    disabled_by_default: true
+    unit_of_measurement: 'kWh'
+    state_class: total_increasing
+    device_class: energy
+    lambda: |-
+      return id(eACcouple4TotalL1).state + id(eACcouple4TotalL2).state;
 
   - platform: modbus_controller
     modbus_controller_id: modbus_conroller1
@@ -1310,7 +1790,6 @@ sensor:
     id: phaseLockFreq
     register_type: read
     address: 128
-    register_count: 10
     unit_of_measurement: 'Hz'
     value_type: U_WORD
     filters:
